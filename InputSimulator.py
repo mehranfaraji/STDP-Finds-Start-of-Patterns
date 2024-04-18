@@ -43,7 +43,7 @@ def make_single_train(min_rate, max_rate, max_time_wo_spike, max_change_speed, r
             tmp = t - np.random.rand() * dt ## this makes firing time continuous, not discrete
             if tmp < 0 or tmp > runduration1:
                 raise ValueError(f'tmp = {tmp} (tmp<0 or tmp>{runduration1} violated)')
-            tmp = max(0, tmp)
+            # tmp = max(0, tmp)
             # tmp = min(runduration1, tmp)
             st. append(tmp)
         firing_rate = firing_rate + rate_change * dt
