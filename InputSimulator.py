@@ -36,6 +36,11 @@ def make_single_train(min_rate, max_rate, max_time_wo_spike, max_change_speed, r
     # for the third line of the condition, if the neuron has not spiked
     # for the last 50 ms or 0.050 seconds then it will definitely will spike
 
+###    t [1, 2, 3, ...., 15000] ms
+### neuron 1:
+### t = 3ms + rand(0,1) * 1ms = 3.02
+### t = 5ms 
+
     for t in np.arange(dt, runduration1, dt):
         if np.random.rand() < dt * firing_rate or \
         (len(st) < 1 and t - virtual_pre_sim_spike > mtws) or \
@@ -91,7 +96,7 @@ def copy_and_paste_jittered_pattern(times, indices, position_copypaste, patternl
         tim1 = np.copy(tim)
         if position_value == 1: # pattern is present
             if spike_del > 0:
-                keep_array = np.random.rand(len(tim))
+                keep_array = np.random.rand(len(ind))
                 keep_array = keep_array > spike_del
                 ind1 = ind[keep_array]
                 tim1 = tim[keep_array]
