@@ -45,7 +45,8 @@ def make_single_train(min_rate, max_rate, max_time_wo_spike, max_change_speed, r
         if np.random.rand() < dt * firing_rate or \
         (len(st) < 1 and t - virtual_pre_sim_spike > mtws) or \
         (len(st) > 0 and t - st[-1] > mtws):
-            tmp = t - np.random.rand() * dt ## this makes firing time continuous, not discrete
+            tmp = t ## for now to make the data discrete
+            # tmp = t - np.random.rand() * dt ## this makes firing time continuous, not discrete
             if tmp < 0 or tmp > runduration1:
                 raise ValueError(f'tmp = {tmp} (tmp<0 or tmp>{runduration1} violated)')
             # tmp = max(0, tmp)
