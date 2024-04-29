@@ -1,10 +1,10 @@
 import numpy as np
 from numba import jit
 
-def make_input(min_rate, max_rate, max_time_wo_spike, max_change_speed, runduration, number_neurons, dt):
+def make_input(min_rate, max_rate, max_time_wo_spike, max_change_speed, runduration, number_neurons, dt, is_continuous):
     spiketimes, indices = [], []
     for n in range(number_neurons):
-        st = np.array(make_single_train(min_rate, max_rate, max_time_wo_spike, max_change_speed, runduration, dt, np.random.randint(2**30)))
+        st = np.array(make_single_train(min_rate, max_rate, max_time_wo_spike, max_change_speed, runduration, dt, is_continuous, np.random.randint(2**30)))
         spiketimes.append(st)
         indices.append(n * np.ones(len(st)))
 
@@ -17,7 +17,7 @@ def make_input(min_rate, max_rate, max_time_wo_spike, max_change_speed, rundurat
 
 
 @jit(nopython=True)
-def make_single_train(min_rate, max_rate, max_time_wo_spike, max_change_speed, runduration, dt, random_seed):
+def make_single_train(min_rate, max_rate, max_time_wo_spike, max_change_speed, runduration, dt, is_continuous, random_seed):
     np.random.seed(int(random_seed))
     runduration1 = min(runduration, 150) # [second]
     st = []
@@ -45,8 +45,10 @@ def make_single_train(min_rate, max_rate, max_time_wo_spike, max_change_speed, r
         if np.random.rand() < dt * firing_rate or \
         (len(st) < 1 and t - virtual_pre_sim_spike > mtws) or \
         (len(st) > 0 and t - st[-1] > mtws):
-            tmp = t ## for now to make the data discrete
-            # tmp = t - np.random.rand() * dt ## this makes firing time continuous, not discrete
+            if is_continuous:
+                tmp = t - np.random.rand() * dt ## this makes firing time continuous, not discrete
+            else:
+                tmp = t ## for now to make the data discrete
             if tmp < 0 or tmp > runduration1:
                 raise ValueError(f'tmp = {tmp} (tmp<0 or tmp>{runduration1} violated)')
             # tmp = max(0, tmp)
