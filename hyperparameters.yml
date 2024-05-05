@@ -1,0 +1,24 @@
+### Fixed hyperparameters
+save_input: input-data
+dt: 0.001
+is_continuous: false
+tripling: true
+num_neurons: 2000
+number_pat: 1000
+
+### Investigate their effect 
+pattern_freq: 0.25
+patternlength: 0.05
+runduration: 450
+### Might change
+max_change_speed: 1800
+max_change_speed_add: 0
+max_rate: 90
+min_rate: 0
+max_time_wo_spike: 0.05
+max_rate_add: 10
+min_rate_add: 10
+max_time_wo_spike_add: 1000
+spike_del: 0
+jitter_sd: 0.1
+
