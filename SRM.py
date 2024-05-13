@@ -10,6 +10,7 @@ spec = [
     ('K1', types.float64),
     ('K2', types.float64),
     ('dt', types.float64),
+    ('patternlength', types.float64),
     ('tref', types.float64),
     ('A_pos', types.float64),
     ('B', types.float64),
@@ -26,7 +27,7 @@ spec = [
 
 @jitclass(spec)
 class SRM():
-    def __init__(self, threshold, tau_m, tau_s, K1, K2, dt, tref, A_pos, B, tau_pos, tau_neg) -> None:
+    def __init__(self, threshold, tau_m, tau_s, K1, K2, dt, tref, A_pos, B, tau_pos, tau_neg, patternlength) -> None:
         self.threshold = threshold
         self.tau_m = tau_m
         self.tau_s = tau_s
@@ -40,6 +41,8 @@ class SRM():
         self.tau_pos=tau_pos
         self.tau_neg=tau_neg
         self.A_neg = - B * self.A_pos
+
+        self.patternlength = patternlength
         
         # initial state of the neuron
         self.last_spike_time = - 10e6
@@ -162,7 +165,7 @@ class SRM():
             t = it*self.dt
             # update pattern_times list
             if pattern_times:
-                if t > pattern_times[0] + 0.05:
+                if t > pattern_times[0] + self.patternlength:
                     pattern_times.pop(0)
             
             if self.ref_counter > 0:
@@ -203,5 +206,5 @@ class SRM():
             self.afferents_not_spiked_yet = self.afferents_not_spiked_yet - first_time_spiked
 
             self.w_sample[:,it:it+1] = weight[:10,:]
-        
+            
         return weight, latency
