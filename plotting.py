@@ -27,7 +27,6 @@ def plot_input(times, indices, params, times_pattern=None, indices_pattern=None,
     plt.ylabel('Neuron number')
     if save_path is not None:
         plt.savefig(save_path)
-    # plt.show()
 
 
 def plot_potential(start_time, end_time, model, position_copypaste, patternlength, dt, save_path=None):
@@ -37,11 +36,9 @@ def plot_potential(start_time, end_time, model, position_copypaste, patternlengt
     plt.axhline(model.threshold, linestyle='--', color='red')
     pattern_time = np.where((position_copypaste == 1))[0] * patternlength
     ind = np.where((pattern_time >= start_time) & (pattern_time <= end_time))
-    pattern_time[ind]
     for i in pattern_time[ind]:
         plt.axvspan(i, i + patternlength, facecolor='gray', alpha=0.7)
     plt.xlabel('Time (s)')
     plt.ylabel('Membrane Potential (arbitrary units)')
     if save_path is not None:
         plt.savefig(save_path)
-    # plt.show()
