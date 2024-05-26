@@ -1,5 +1,5 @@
 ### Fixed hyperparameters
-save_input: input-data
+save_input: input-data-newmodel
 dt: 0.001
 is_continuous: false
 tripling: true

@@ -2,8 +2,8 @@ import os
 import yaml
 
 import numpy as np
-import matplotlib.pyplot as plt
-from scipy import sparse
+# import matplotlib.pyplot as plt
+# from scipy import sparse
 
 from InputSimulator import make_input, make_pattern_presentation_array, copy_and_paste_jittered_pattern
 from InputSimulator import triple_input_runtime, add_noise
@@ -35,14 +35,14 @@ class InputGenerator():
         self.jitter_sd = hyperparameters["jitter_sd"]
 
 
-    def get_spiketrain(self, times, indices, num_neurons, runduration, dt):
-        spike_train = np.zeros((num_neurons, int(runduration/dt/3)))
-        for time, index in zip(times, indices):
-            time = int(time/dt)
-            if time == spike_train.shape[1]:
-                break
-            spike_train[index,time] = 1
-        return spike_train
+    # def get_spiketrain(self, times, indices, num_neurons, runduration, dt):
+    #     spike_train = np.zeros((num_neurons, int(runduration/dt/3)))
+    #     for time, index in zip(times, indices):
+    #         time = int(time/dt)
+    #         if time == spike_train.shape[1]:
+    #             break
+    #         spike_train[index,time] = 1
+    #     return spike_train
 
     def get_pattern_times(self, position_copypaste, patternlength, runduration):
         r = np.arange(0,runduration, patternlength)
@@ -69,12 +69,12 @@ class InputGenerator():
         times, indices = add_noise(times, indices, times_add, indices_add)
         indices = indices.astype(int)
         if self.tripling and self.runduration > 300:
-                spike_train = self.get_spiketrain(times, indices, self.num_neurons, self.runduration, self.dt)
-                spike_train = np.concatenate((spike_train, spike_train, spike_train), axis=1)
+                # spike_train = self.get_spiketrain(times, indices, self.num_neurons, self.runduration, self.dt)
+                # spike_train = np.concatenate((spike_train, spike_train, spike_train), axis=1)
                 times, indices = triple_input_runtime(times, indices)
                 position_copypaste = np.concatenate((position_copypaste, position_copypaste, position_copypaste))
-        else:
-            spike_train = self.get_spiketrain(times, indices, self.num_neurons, self.runduration, self.dt)
+        # else:
+            # spike_train = self.get_spiketrain(times, indices, self.num_neurons, self.runduration, self.dt)
         
         pattern_times = self.get_pattern_times(position_copypaste, self.patternlength, self.runduration)
 
@@ -86,8 +86,8 @@ class InputGenerator():
         np.save(os.path.join(self.input_folder, "times_pattern.npy"), times_pattern)
         np.save(os.path.join(self.input_folder, "indices_pattern.npy"), indices_pattern)
         np.save(os.path.join(self.input_folder, "position_copypaste.npy"), position_copypaste)
-        sparse_spike_train = sparse.csr_matrix(spike_train)
-        sparse.save_npz(os.path.join(self.input_folder, "sparse_spike_train.npz"), sparse_spike_train)
+        # sparse_spike_train = sparse.csr_matrix(spike_train)
+        # sparse.save_npz(os.path.join(self.input_folder, "sparse_spike_train.npz"), sparse_spike_train)
         np.save(os.path.join(self.input_folder, "pattern_times.npy"), pattern_times)
 
 if __name__ == "__main__":

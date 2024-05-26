@@ -247,6 +247,7 @@ class Synapse():
         else: self.a_pre[idx, :] += self.A_pre
               # self.a_pre[self.afferents_spiked] += self.A_pre
         self.w[idx, :] = np.clip(self.w[idx, :] + self.a_post[idx, :], self.w_min, self.w_max)
+        # self.a_post[idx, :] = 0.
         # self.w = np.clip(self.w + self.a_post[self.afferents_spiked], self.w_min, self.w_max)
 
     def on_post(self, idx):
@@ -258,6 +259,7 @@ class Synapse():
         else: self.a_post[:, idx.squeeze()] += self.A_post
         ## TODO: Only the weights of the postsynaptic neurons that are spiking at the current time should be updated
         self.w[:, idx.squeeze()] = np.clip(self.w[:, idx.squeeze()] + self.a_pre[:, idx.squeeze()], self.w_min, self.w_max)
+        # self.a_pre[:, idx.squeeze()] = 0.
 
     def update_a(self):
         self.a_pre = self.a_pre - self.dt / self.tau_pre * self.a_pre
@@ -363,6 +365,8 @@ class Network(NetworkBase):
             # print(len(spikes_i[idx_left:idx_right]), len(set(spikes_i[idx_left:idx_right])))
 
             self.synapses[l].on_pre(spikes_i[idx_left:idx_right])
+
+            self.synapses[l].update_a()
         
             
 
